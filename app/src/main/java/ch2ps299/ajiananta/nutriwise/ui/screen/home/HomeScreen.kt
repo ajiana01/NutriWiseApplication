@@ -32,9 +32,11 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import ch2ps299.ajiananta.nutriwise.R
 import ch2ps299.ajiananta.nutriwise.ui.component.ButtonComponent
 import ch2ps299.ajiananta.nutriwise.ui.component.InputNumberField
+import ch2ps299.ajiananta.nutriwise.ui.navbar.Screen
 import ch2ps299.ajiananta.nutriwise.ui.theme.NunitoFontFamily
 import ch2ps299.ajiananta.nutriwise.ui.theme.NutriWiseApplicationTheme
 import ch2ps299.ajiananta.nutriwise.ui.theme.md_theme_light_primary
@@ -43,7 +45,8 @@ import ch2ps299.ajiananta.nutriwise.ui.theme.md_theme_light_secondaryContainer
 
 @Composable
 fun HomeScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navController: NavController
 ) {
     Column (
         modifier = modifier
@@ -51,18 +54,21 @@ fun HomeScreen(
             .background(color = Color.White)
     ) {
         HomeProfile(
-            userName = "Aji Ananta"
+            userName = "Aji Ananta",
+            historyClick = { navController.navigate(route = Screen.HistoryScreen.route) },
+            changeProfileClick = {navController.navigate(route = Screen.ProfileChangeChild.route)}
         )
-        StuntingCheck()
+        StuntingCheck(
+            stuntingClick = {navController.navigate(route = Screen.StuntingResult.route)}
+        )
     }
 }
-
 @Composable
 fun HomeProfile(
     modifier: Modifier = Modifier,
     userName: String,
     historyClick: () -> Unit = {},
-    changeProfileClick: () -> Unit = {},
+    changeProfileClick: () -> Unit = {}
 ) {
 
     Box{
@@ -170,7 +176,8 @@ fun HomeProfile(
 
 @Composable
 fun StuntingCheck(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    stuntingClick: () -> Unit = {},
 ) {
     var weightText by remember { mutableStateOf(TextFieldValue()) }
     var heightText by remember { mutableStateOf(TextFieldValue()) }
@@ -192,7 +199,7 @@ fun StuntingCheck(
         Spacer(modifier = modifier.height(8.dp))
         InputNumberField(labelText = "Lingkar Kepala (cm)", text = circleText, onTextChange = { circleText = it} , placeholder = "Contoh: 35.5")
         Spacer(modifier = modifier.height(16.dp))
-        ButtonComponent(text = "Stunting Cek", onClick = {})
+        ButtonComponent(text = "Stunting Cek", onClick = {stuntingClick()})
     }
 }
 
@@ -200,6 +207,10 @@ fun StuntingCheck(
 @Preview(showBackground = true)
 fun HomeProfilePreview() {
     NutriWiseApplicationTheme {
-        HomeScreen()
+        HomeScreen(
+            navController = NavController(
+                context = androidx.compose.ui.platform.LocalContext.current
+            )
+        )
     }
 }

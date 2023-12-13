@@ -16,10 +16,12 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import ch2ps299.ajiananta.nutriwise.ui.component.ButtonComponent
 import ch2ps299.ajiananta.nutriwise.ui.component.TopBar
 import ch2ps299.ajiananta.nutriwise.ui.theme.NunitoFontFamily
@@ -28,7 +30,8 @@ import ch2ps299.ajiananta.nutriwise.ui.theme.md_theme_light_secondaryContainer
 
 @Composable
 fun ChildDataScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navController: NavController
 ) {
     Column(
         modifier = modifier
@@ -36,7 +39,10 @@ fun ChildDataScreen(
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         Column {
-            TopBar(labelText = "Data Anak", onBackClick = {})
+            TopBar(labelText = "Data Anak", onBackClick = {navController.navigate(route = "home"){
+                popUpTo("home"){
+                    inclusive = true
+                } } } )
             Column(
                 modifier = modifier
                     .padding(16.dp)
@@ -50,7 +56,7 @@ fun ChildDataScreen(
             }
         }
         Column(modifier = modifier.padding(16.dp)) {
-            ButtonComponent(text = "Tambah Data Anak", onClick = {})
+            ButtonComponent(text = "Tambah Data Anak", onClick = { navController.navigate(route = "add_data_child")})
         }
     }
 }
@@ -110,5 +116,7 @@ fun ChildDataPreview() {
 @Composable
 @Preview(showBackground = true)
 fun ChildDataScreenPreview() {
-    ChildDataScreen()
+    ChildDataScreen(
+        navController = NavController(LocalContext.current)
+    )
 }

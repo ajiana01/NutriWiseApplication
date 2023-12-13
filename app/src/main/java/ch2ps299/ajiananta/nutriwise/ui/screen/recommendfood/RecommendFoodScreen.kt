@@ -17,12 +17,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import ch2ps299.ajiananta.nutriwise.R
+import ch2ps299.ajiananta.nutriwise.ui.component.ButtonComponent
 import ch2ps299.ajiananta.nutriwise.ui.screen.stuntingcheckresult.RecommendFoodAdditional
 import ch2ps299.ajiananta.nutriwise.ui.theme.NunitoFontFamily
 import ch2ps299.ajiananta.nutriwise.ui.theme.md_theme_light_onPrimaryContainer
@@ -30,7 +33,9 @@ import ch2ps299.ajiananta.nutriwise.ui.theme.md_theme_light_primary
 import ch2ps299.ajiananta.nutriwise.ui.theme.md_theme_light_secondaryContainer
 
 @Composable
-fun RecommendFoodScreen() {
+fun RecommendFoodScreen(
+    navController: NavController
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -38,11 +43,14 @@ fun RecommendFoodScreen() {
     ){
         RecommendFoodBanner(image = R.drawable.banner_recommend)
         Spacer(modifier = Modifier.height(16.dp))
-        NutritionChecker()
+        NutritionChecker(
+            checkNutrition = {
+                navController.navigate(route = "nutrition_result")
+            }
+        )
         Spacer(modifier = Modifier.height(16.dp))
         RecommendFoodAdditional()
     }
-
 }
 
 @Composable
@@ -91,17 +99,23 @@ fun RecommendFoodBanner(
 }
 
 @Composable
-fun NutritionChecker() {
+fun NutritionChecker(
+    checkNutrition: () -> Unit
+) {
     Text(text = "Makanan Harian Anak",
         fontWeight = FontWeight.Bold,
         fontFamily = NunitoFontFamily,
         fontSize = 16.sp,
         color = md_theme_light_primary)
+    Spacer(modifier = Modifier.height(8.dp))
+    ButtonComponent(text = "Cek Kebutuhan Nutrisi", onClick = {checkNutrition()})
 }
 
 
 @Composable
 @Preview(showBackground = true)
 fun PreviewRecommendFoodScreen() {
-    RecommendFoodScreen()
+    RecommendFoodScreen(
+        navController = NavController(LocalContext.current)
+    )
 }

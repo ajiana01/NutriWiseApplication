@@ -20,6 +20,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import ch2ps299.ajiananta.nutriwise.ui.component.ButtonComponent
 import ch2ps299.ajiananta.nutriwise.ui.component.DatePicker
 import ch2ps299.ajiananta.nutriwise.ui.component.InputNumberField
@@ -31,7 +32,8 @@ import ch2ps299.ajiananta.nutriwise.ui.theme.md_theme_light_primary
 
 @Composable
 fun AddDataChildScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navController: NavController
 ) {
     var childName by remember { mutableStateOf(TextFieldValue()) }
     var weightText by remember { mutableStateOf(TextFieldValue()) }
@@ -40,7 +42,7 @@ fun AddDataChildScreen(
     val contxt = LocalContext.current
 
     Column(modifier = modifier.fillMaxSize()) {
-        TopBar(labelText = "Tambah Data Anak", onBackClick = { /*TODO*/ })
+        TopBar(labelText = "Tambah Data Anak", onBackClick = { navController.popBackStack()})
         Column(
             modifier = modifier
                 .padding(16.dp)
@@ -66,7 +68,11 @@ fun AddDataChildScreen(
                 InputNumberField(labelText = "Lingkar Kepala (cm)", text = circleText, onTextChange = { circleText = it} , placeholder = "Contoh: 35.5")
                 Spacer(modifier = modifier.height(16.dp))
             }
-            ButtonComponent(text = "Simpan", onClick = {})
+            ButtonComponent(text = "Simpan", onClick = {navController.navigate(route = "profile_change_child") {
+                popUpTo("profile_change_child"){
+                    inclusive = true
+                }
+            } })
         }
     }
 }
@@ -75,6 +81,10 @@ fun AddDataChildScreen(
 @Preview(showBackground = true)
 fun AddDataChildScreenPreview() {
     NutriWiseApplicationTheme {
-        AddDataChildScreen()
+        AddDataChildScreen(
+            navController = NavController(
+                context = LocalContext.current
+            )
+        )
     }
 }

@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -18,6 +19,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import ch2ps299.ajiananta.nutriwise.R
 import ch2ps299.ajiananta.nutriwise.ui.component.TopBar
 import ch2ps299.ajiananta.nutriwise.ui.theme.NunitoFontFamily
@@ -27,20 +29,19 @@ import ch2ps299.ajiananta.nutriwise.ui.theme.md_theme_light_primary
 
 @Composable
 fun NutritionResultScreen(
-    nutritionCheck: Boolean,
-    nutritionNeed: String,
+    navController: NavController,
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        TopBar(labelText = "Hasil Kebutuhan Gizi", onBackClick = { /*TODO*/ })
+        TopBar(labelText = "Hasil Kebutuhan Gizi", onBackClick = { navController.popBackStack() })
         Column(
             modifier = Modifier
                 .padding(16.dp)
         ) {
             Spacer(modifier = Modifier.padding(8.dp))
-            NutritionResultItem(nutrition = nutritionNeed, isEnough = nutritionCheck)
+            NutritionResultItem(nutrition = "nutritionNeed", isEnough = false)
         }
     }
 }
@@ -86,11 +87,15 @@ fun RecommendFoodByNutrition() {
 @Composable
 @Preview(showBackground = true)
 fun NutritionResultScreenPreview() {
-    NutritionResultScreen(nutritionCheck = true, nutritionNeed = "none")
+    NutritionResultScreen(
+        navController = NavController(LocalContext.current)
+    )
 }
 
 @Composable
 @Preview(showBackground = true)
 fun NutritionResultScreenPreview2() {
-    NutritionResultScreen(nutritionCheck = false, nutritionNeed = "Vitamin A")
+    NutritionResultScreen(
+        navController = NavController(LocalContext.current)
+    )
 }

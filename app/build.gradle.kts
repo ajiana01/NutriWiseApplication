@@ -75,5 +75,4 @@ dependencies {
     //pager
     implementation("com.google.accompanist:accompanist-pager:0.24.13-rc")
 
-
 }
