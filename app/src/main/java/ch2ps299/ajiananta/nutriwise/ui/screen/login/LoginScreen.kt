@@ -1,5 +1,6 @@
 package ch2ps299.ajiananta.nutriwise.ui.screen.login
 
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -21,33 +22,64 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import ch2ps299.ajiananta.nutriwise.R
+import ch2ps299.ajiananta.nutriwise.di.DataInjection
+import ch2ps299.ajiananta.nutriwise.model.SignInState
 import ch2ps299.ajiananta.nutriwise.ui.theme.NunitoFontFamily
 import ch2ps299.ajiananta.nutriwise.ui.theme.md_theme_light_outlineVariant
 import ch2ps299.ajiananta.nutriwise.ui.theme.md_theme_light_primary
+import ch2ps299.ajiananta.nutriwise.ui.viewmodel.LoginViewModel
+import ch2ps299.ajiananta.nutriwise.ui.viewmodel.RecipesViewModel
+import ch2ps299.ajiananta.nutriwise.ui.viewmodel.ViewModelFactory
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(
+    state: SignInState,
+    onSignIn: () -> Unit,
+    viewModel: LoginViewModel = viewModel(
+        factory = ViewModelFactory(
+            DataInjection.provideRepository()
+        )
+    )
+) {
+    val context = LocalContext.current
+    LaunchedEffect(key1 = state.signInError) {
+        state.signInError?.let {error ->
+            Toast.makeText(
+                context,
+                error,
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(color = Color.Black)
     ) {
-        LoginContent()
+        LoginContent(
+            onSignIn = onSignIn
+        )
     }
 }
 
 @Composable
-fun LoginContent() {
+fun LoginContent(
+    onSignIn: () -> Unit
+) {
     Column {
         Box {
             Image(
@@ -80,10 +112,23 @@ fun LoginContent() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .fillMaxHeight()
-                    .padding(top = 32.dp, start = 16.dp, end = 16.dp, bottom = 16.dp),
+                    .padding(top = 8.dp, start = 16.dp, end = 16.dp, bottom = 16.dp),
                 verticalArrangement = Arrangement.SpaceBetween,
             ) {
                 Column {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .width(56.dp)
+                                .height(4.dp)
+                                .background(md_theme_light_outlineVariant, shape = RoundedCornerShape(4.dp))
+                        )
+                    }
                     Text(text = "Selamat Datang,",
                         fontWeight = FontWeight.Bold,
                         fontFamily = NunitoFontFamily,
@@ -101,7 +146,7 @@ fun LoginContent() {
                 }
                 Spacer(modifier = Modifier.height(8.dp))
                 Button(
-                    onClick = {},
+                    onClick = { onSignIn()},
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(48.dp),
@@ -132,5 +177,8 @@ fun LoginContent() {
 @Composable
 @Preview(showBackground = true)
 fun LoginPreview() {
-    LoginScreen()
+    LoginScreen(
+        state = SignInState(),
+        onSignIn = {}
+    )
 }

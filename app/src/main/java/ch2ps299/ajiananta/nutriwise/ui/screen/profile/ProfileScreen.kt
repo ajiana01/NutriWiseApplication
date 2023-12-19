@@ -1,6 +1,5 @@
 package ch2ps299.ajiananta.nutriwise.ui.screen.profile
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -15,11 +14,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowForward
-import androidx.compose.material.icons.outlined.ExitToApp
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.automirrored.outlined.ExitToApp
 import androidx.compose.material.icons.outlined.Face
 import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,21 +29,23 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import ch2ps299.ajiananta.nutriwise.R
+import ch2ps299.ajiananta.nutriwise.model.UserData
 import ch2ps299.ajiananta.nutriwise.ui.theme.NunitoFontFamily
 import ch2ps299.ajiananta.nutriwise.ui.theme.md_theme_light_onPrimaryContainer
 import ch2ps299.ajiananta.nutriwise.ui.theme.md_theme_light_outlineVariant
 import ch2ps299.ajiananta.nutriwise.ui.theme.md_theme_light_primary
+import coil.compose.AsyncImage
 
 @Composable
 fun ProfileScreen(
-    navController: NavController
+    navController: NavController,
+    userData: UserData,
+    onClickLogout: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -55,17 +56,22 @@ fun ProfileScreen(
             modifier = Modifier
                 .padding(16.dp)
         ) {
-            ProfileContent(
-                imageProfile = R.drawable.ic_launcher_background,
-                userName = "Aji Ananta",
-                email = "iklanwckeliling@gmail.com",
-                onClickChildData = {
-                    navController.navigate("profile_change_child")
-                },
-                onClickAbout = {
-                    navController.navigate("about")
-                },
-            )
+            userData.photoUrl?.let {
+                ProfileContent(
+                    imageProfile = it,
+                    userName = userData.name ?: "",
+                    email = userData.email ?: "",
+                    onClickChildData = {
+                        navController.navigate("profile_change_child")
+                    },
+                    onClickAbout = {
+                        navController.navigate("about")
+                    },
+                    onClickLogout = {
+                        onClickLogout()
+                    }
+                )
+            }
         }
 
     }
@@ -73,7 +79,7 @@ fun ProfileScreen(
 
 @Composable
 fun ProfileContent(
-    imageProfile: Int,
+    imageProfile: String,
     userName: String,
     email: String,
     onClickChildData: () -> Unit = {},
@@ -91,8 +97,8 @@ fun ProfileContent(
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Image(
-                painter = painterResource(imageProfile),
+            AsyncImage(
+                model = imageProfile,
                 contentDescription = "Photo Profile",
                 contentScale = ContentScale.Fit,
                 modifier = Modifier
@@ -122,18 +128,18 @@ fun ProfileContent(
             contentText = "Tambah, ubah dan hapus profil anak",
             onClickDetail = { onClickChildData() }
         )
-        Spacer(modifier = Modifier.height(8.dp))
-        Divider()
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(16.dp))
+        HorizontalDivider()
+        Spacer(modifier = Modifier.height(16.dp))
         ProfileItem(
             icon = Icons.Outlined.Info,
             title = "Tentang Kami",
             contentText = "Tentang Wise Team",
             onClickDetail = { onClickAbout() }
         )
-        Spacer(modifier = Modifier.height(8.dp))
-        Divider()
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(16.dp))
+        HorizontalDivider()
+        Spacer(modifier = Modifier.height(16.dp))
         LogoutFromApp(
             onClickLogout = { onClickLogout() }
         )
@@ -175,7 +181,7 @@ fun ProfileItem(
                 )
             }
         }
-        Icon(imageVector = Icons.Default.ArrowForward, contentDescription = "Icon $title", tint = md_theme_light_onPrimaryContainer)
+        Icon(imageVector = Icons.AutoMirrored.Filled.ArrowForward, contentDescription = "Icon $title", tint = md_theme_light_onPrimaryContainer)
     }
 }
 
@@ -194,7 +200,7 @@ fun LogoutFromApp(
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(imageVector = Icons.Outlined.ExitToApp, contentDescription = "Exit App", tint = md_theme_light_outlineVariant, modifier = Modifier.size(36.dp))
+            Icon(imageVector = Icons.AutoMirrored.Outlined.ExitToApp, contentDescription = "Exit App", tint = md_theme_light_outlineVariant, modifier = Modifier.size(36.dp))
             Spacer(modifier = Modifier.width(16.dp))
             Text(text = "Keluar",
                 fontWeight = FontWeight.Bold,
@@ -216,7 +222,14 @@ fun LogoutFromApp(
 @Preview(showBackground = true)
 fun ProfileScreenPreview() {
     ProfileScreen(
-        navController = NavController(LocalContext.current)
+        navController = NavController(LocalContext.current),
+        userData = UserData(
+            "1",
+            "",
+            "Aji Ananta",
+            "https://avatars.githubusercontent.com/u/24792674?v=4"
+        ),
+        onClickLogout = {}
     )
 }
 

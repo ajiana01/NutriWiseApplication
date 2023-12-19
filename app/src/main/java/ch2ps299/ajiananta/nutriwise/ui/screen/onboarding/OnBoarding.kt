@@ -38,7 +38,6 @@ import ch2ps299.ajiananta.nutriwise.ui.theme.NutriWiseApplicationTheme
 import ch2ps299.ajiananta.nutriwise.ui.theme.md_theme_light_onSecondaryContainer
 import ch2ps299.ajiananta.nutriwise.ui.theme.md_theme_light_outlineVariant
 import ch2ps299.ajiananta.nutriwise.ui.theme.md_theme_light_primary
-import com.google.accompanist.pager.HorizontalPager
 
 
 @Composable

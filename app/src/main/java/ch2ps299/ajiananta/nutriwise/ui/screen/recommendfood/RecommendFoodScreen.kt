@@ -49,7 +49,7 @@ fun RecommendFoodScreen(
             }
         )
         Spacer(modifier = Modifier.height(16.dp))
-        RecommendFoodAdditional()
+        //RecommendFoodAdditional()
     }
 }
 

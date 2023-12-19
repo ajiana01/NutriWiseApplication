@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "470290260754",
+    "project_id": "nutri-wise-25aa6",
+    "storage_bucket": "nutri-wise-25aa6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:470290260754:android:e85c2e896918596c4d09cb",
+        "android_client_info": {
+          "package_name": "ch2ps299.ajiananta.nutriwise"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "470290260754-k2jqrnbkuvgneeloff4m1dl424s290l4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ch2ps299.ajiananta.nutriwise",
+            "certificate_hash": "57d1ff8bb763de51193e463ffddc7e30ee47084c"
+          }
+        },
+        {
+          "client_id": "470290260754-lm3umm9410f2bh2rj2i3i42fg4d42svi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDjAiRCZJ2OcoEJ33kK3SwyJDscw8NKyTs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "470290260754-lm3umm9410f2bh2rj2i3i42fg4d42svi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

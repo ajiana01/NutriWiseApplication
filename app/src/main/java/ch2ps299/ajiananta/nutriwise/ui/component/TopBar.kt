@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -31,7 +31,7 @@ fun TopBar(
             .fillMaxWidth()
     ) {
         IconButton(onClick = onBackClick) {
-            Icon(Icons.Default.ArrowBack, contentDescription = "Back Button", tint = md_theme_light_primary)
+            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back Button", tint = md_theme_light_primary)
         }
         Spacer(modifier = modifier.width(8.dp))
         Text(text = labelText,

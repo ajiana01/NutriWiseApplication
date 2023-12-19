@@ -10,11 +10,11 @@ sealed class Screen(val route: String) {
     data object StuntingResult: Screen("stunting_result")
     data object AddDataChild : Screen("add_data_child")
     data object FoodRecipes : Screen("food_recipes")
+    data object DetailRecipe: Screen("food_recipes/{id}") {
+        fun createRoute(id: Long) = "food_recipes/$id"
+    }
     data object Profile : Screen("profile")
     data object About : Screen("about")
     data object Nutrition : Screen("nutrition")
     data object NutritionResult : Screen("nutrition_result")
-    data object DetailFood : Screen("food_recipes/{id}") {
-        fun createRoute(id: Long) = "food_recipes/$id"
-    }
 }

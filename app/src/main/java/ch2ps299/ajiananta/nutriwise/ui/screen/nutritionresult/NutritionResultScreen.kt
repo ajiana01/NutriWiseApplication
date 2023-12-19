@@ -72,7 +72,6 @@ fun NutritionResultItem(
             fontFamily = NunitoFontFamily,
             fontSize = 11.sp,
             color = md_theme_light_onSecondaryContainer,
-            maxLines = 4,
             style = TextStyle(textAlign = if (isEnough) TextAlign.Center else TextAlign.Start),
             modifier = Modifier.fillMaxWidth()
         )

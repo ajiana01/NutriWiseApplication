@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "470290260754",
+    "project_id": "nutri-wise-25aa6",
+    "storage_bucket": "nutri-wise-25aa6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:470290260754:android:e85c2e896918596c4d09cb",
+        "android_client_info": {
+          "package_name": "ch2ps299.ajiananta.nutriwise"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDjAiRCZJ2OcoEJ33kK3SwyJDscw8NKyTs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
