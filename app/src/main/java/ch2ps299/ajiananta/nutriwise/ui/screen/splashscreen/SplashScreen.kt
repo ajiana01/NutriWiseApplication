@@ -33,7 +33,7 @@ fun SplashScreen(navController: NavHostController) {
         }
     } else {
         navController.navigate(Screen.LoginScreen.route) {
-            popUpTo("splash_screen") { inclusive = true }
+            popUpTo("splash") { inclusive = true }
         }
     }
 
