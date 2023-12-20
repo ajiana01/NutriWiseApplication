@@ -60,7 +60,7 @@ fun FilterChipComponent(viewModel: RecipesViewModel) {
 @Composable
 @Preview(showBackground = true)
 fun FilterChipComponentPreview() {
-    FilterChipComponent(
-        viewModel = RecipesViewModel(WiseRepository())
-    )
+    /*FilterChipComponent(
+        viewModel = RecipesViewModel(WiseRepository(//TODO))
+    )*/
 }

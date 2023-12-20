@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import ch2ps299.ajiananta.nutriwise.R
 import ch2ps299.ajiananta.nutriwise.di.DataInjection
+import ch2ps299.ajiananta.nutriwise.di.RetrofitClient
 import ch2ps299.ajiananta.nutriwise.ui.common.UiState
 import ch2ps299.ajiananta.nutriwise.ui.component.TopBar
 import ch2ps299.ajiananta.nutriwise.ui.theme.NunitoFontFamily
@@ -53,7 +54,10 @@ import ch2ps299.ajiananta.nutriwise.ui.viewmodel.ViewModelFactory
 fun DetailFoodScreen(
     id: Long,
     viewModel: DetailFoodViewModel = viewModel(
-        factory = ViewModelFactory(DataInjection.provideRepository())),
+        factory = ViewModelFactory(
+            DataInjection.provideRepository(),
+            RetrofitClient.provideRepository2()
+        )),
     navigateBack: () -> Unit,
 ) {
     viewModel.uiState.collectAsState(initial = UiState.Loading).value.let {

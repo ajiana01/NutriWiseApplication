@@ -1,5 +1,6 @@
 package ch2ps299.ajiananta.nutriwise
 
+import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -7,6 +8,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -54,6 +56,7 @@ import ch2ps299.ajiananta.nutriwise.ui.screen.login.LoginScreen
 import ch2ps299.ajiananta.nutriwise.ui.screen.nutritionresult.NutritionResultScreen
 import ch2ps299.ajiananta.nutriwise.ui.screen.profile.ProfileScreen
 import ch2ps299.ajiananta.nutriwise.ui.screen.recommendfood.RecommendFoodScreen
+import ch2ps299.ajiananta.nutriwise.ui.screen.splashscreen.SplashScreen
 import ch2ps299.ajiananta.nutriwise.ui.screen.stuntingcheckresult.StuntingCheckResultScreen
 import ch2ps299.ajiananta.nutriwise.ui.theme.NutriWiseApplicationTheme
 import ch2ps299.ajiananta.nutriwise.ui.theme.md_theme_light_outlineVariant
@@ -70,6 +73,7 @@ class MainActivity : ComponentActivity() {
             Identity.getSignInClient(applicationContext)
         )
     }
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -89,11 +93,11 @@ class MainActivity : ComponentActivity() {
                     ) {innerPadding ->
                         NavHost(
                             navController = navController,
-                            startDestination = Screen.LoginScreen.route,
-                            modifier = Modifier.padding(innerPadding)
+                            startDestination = Screen.SplashScreen.route,
+                            modifier = Modifier.padding(innerPadding),
                         ) {
                             composable(Screen.SplashScreen.route) {
-
+                                SplashScreen(navController = navController)
                             }
                             composable(Screen.OnBoardingScreen.route) {
 
@@ -148,8 +152,13 @@ class MainActivity : ComponentActivity() {
                                     }
                                 )
                             }
-                            composable(Screen.HomeMenu.route) {
-                                HomeScreen(navController = navController)
+                            composable(Screen.HomeMenu.route) { backStackEntry ->
+                                val childId = backStackEntry.arguments?.getString("childId") ?: ""
+                                HomeScreen(navController = navController,userData = googleAuthClient.getSignedInUser() ?: return@composable, childIdArg = childId)
+                            }
+                            composable("home_screen/{childId}") { backStackEntry ->
+                                val childId = backStackEntry.arguments?.getString("childId") ?: ""
+                                HomeScreen(navController = navController, userData = googleAuthClient.getSignedInUser() ?: return@composable, childIdArg = childId)
                             }
                             composable(Screen.ProfileChangeChild.route) {
                                 ChildDataScreen(navController = navController)
@@ -160,10 +169,21 @@ class MainActivity : ComponentActivity() {
                             composable(Screen.HistoryScreen.route) {
                                 HistoryScreen(navController = navController)
                             }
-                            composable(Screen.StuntingResult.route){
-                                StuntingCheckResultScreen(navController=navController, navToDetail = {id ->
+                            composable(
+                                Screen.StuntingResult.route,
+                                arguments = listOf(
+                                    navArgument("childId") { type = NavType.StringType },
+                                    navArgument("stunting_status") { type = NavType.StringType }),
+                                ){
+                                val childId = it.arguments?.getString("childId") ?: ""
+                                val stuntingStatus = it.arguments?.getString("stunting_status")?.toBoolean() ?: false
+                                StuntingCheckResultScreen(
+                                    navController=navController,
+                                    navToDetail = {id ->
                                     navController.navigate(Screen.DetailRecipe.createRoute(id))
-                                })
+                                    },
+                                    childId = childId,
+                                    isStunting = stuntingStatus)
                             }
                             composable(Screen.Nutrition.route){
                                 RecommendFoodScreen(navController)
@@ -214,16 +234,8 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun NutriWiseApp(
-    navController: NavHostController = rememberNavController(),
-    modifier: Modifier,
-) {
-
-}
-
-@Composable
 fun shouldHideBottomBar(currentRoute: String?): Boolean {
-    val hideBottomBarRoutes = setOf("stunting_result", "nutrition_result","login")
+    val hideBottomBarRoutes = setOf("stunting_result", "nutrition_result","login","splash")
     if (currentRoute in hideBottomBarRoutes) return true
     return currentRoute?.startsWith("food_recipes/") == true
 }
@@ -233,6 +245,9 @@ fun BottomBar(
     navController: NavController,
     modifier: Modifier = Modifier
 ) {
+    fun isRouteSelected(route: String?, itemRoute: String): Boolean {
+        return route?.startsWith(itemRoute) == true
+    }
     Column {
         HorizontalDivider(thickness = 1.dp, color = md_theme_light_outlineVariant)
         NavigationBar(
@@ -289,12 +304,12 @@ fun BottomBar(
                 )
             )
             navigationItem.map { item ->
-                val isSelected = currentRoute == item.screen.route
+                val isSelected = isRouteSelected(currentRoute, item.screen.route)
                 NavigationBarItem(
                     icon = {
                         item.icon(isSelected)
                     },
-                    selected = currentRoute == item.screen.route,
+                    selected = isSelected,
                     onClick = {
                         navController.navigate(item.screen.route) {
                             popUpTo(navController.graph.findStartDestination().id) {

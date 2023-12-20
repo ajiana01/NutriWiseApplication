@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -36,12 +35,12 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import ch2ps299.ajiananta.nutriwise.R
 import ch2ps299.ajiananta.nutriwise.di.DataInjection
+import ch2ps299.ajiananta.nutriwise.di.RetrofitClient
 import ch2ps299.ajiananta.nutriwise.model.SignInState
 import ch2ps299.ajiananta.nutriwise.ui.theme.NunitoFontFamily
 import ch2ps299.ajiananta.nutriwise.ui.theme.md_theme_light_outlineVariant
 import ch2ps299.ajiananta.nutriwise.ui.theme.md_theme_light_primary
 import ch2ps299.ajiananta.nutriwise.ui.viewmodel.LoginViewModel
-import ch2ps299.ajiananta.nutriwise.ui.viewmodel.RecipesViewModel
 import ch2ps299.ajiananta.nutriwise.ui.viewmodel.ViewModelFactory
 
 @Composable
@@ -50,7 +49,8 @@ fun LoginScreen(
     onSignIn: () -> Unit,
     viewModel: LoginViewModel = viewModel(
         factory = ViewModelFactory(
-            DataInjection.provideRepository()
+            DataInjection.provideRepository(),
+            RetrofitClient.provideRepository2()
         )
     )
 ) {
@@ -80,14 +80,19 @@ fun LoginScreen(
 fun LoginContent(
     onSignIn: () -> Unit
 ) {
-    Column {
-        Box {
+    Column(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Box(
+            modifier = Modifier
+                .weight(2f) // Gunakan weight untuk membagi ruang secara adil
+                .fillMaxWidth()
+        ) {
             Image(
                 painterResource(R.drawable.login_image),
                 contentDescription = "Login Image",
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .heightIn(min = 400.dp, max = 600.dp),
+                    .fillMaxWidth(),
                 contentScale = ContentScale.Crop
             )
             Column(
@@ -107,6 +112,8 @@ fun LoginContent(
         Box(
             modifier = Modifier
                 .background(Color.White, RoundedCornerShape( topStart = 32.dp, topEnd = 32.dp))
+                .weight(1f) // Gunakan weight untuk membagi ruang secara adil
+                .fillMaxWidth()
         ) {
             Column(
                 modifier = Modifier

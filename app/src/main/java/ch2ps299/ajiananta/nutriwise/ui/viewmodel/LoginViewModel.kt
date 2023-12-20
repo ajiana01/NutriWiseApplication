@@ -1,9 +1,6 @@
 package ch2ps299.ajiananta.nutriwise.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
-import ch2ps299.ajiananta.nutriwise.data.WiseRepository
-import ch2ps299.ajiananta.nutriwise.di.DataInjection
 import ch2ps299.ajiananta.nutriwise.model.SignInResult
 import ch2ps299.ajiananta.nutriwise.model.SignInState
 import kotlinx.coroutines.flow.MutableStateFlow

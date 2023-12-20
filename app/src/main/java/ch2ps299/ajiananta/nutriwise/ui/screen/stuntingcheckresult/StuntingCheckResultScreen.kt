@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -31,6 +33,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import ch2ps299.ajiananta.nutriwise.R
 import ch2ps299.ajiananta.nutriwise.di.DataInjection
+import ch2ps299.ajiananta.nutriwise.di.RetrofitClient
 import ch2ps299.ajiananta.nutriwise.model.Recipe
 import ch2ps299.ajiananta.nutriwise.ui.common.UiState
 import ch2ps299.ajiananta.nutriwise.ui.component.ButtonComponent
@@ -46,11 +49,14 @@ import ch2ps299.ajiananta.nutriwise.ui.viewmodel.ViewModelFactory
 fun StuntingCheckResultScreen(
     viewModel: StuntingCheckResultViewModel = viewModel(
         factory = ViewModelFactory(
-            DataInjection.provideRepository()
+            DataInjection.provideRepository(),
+            RetrofitClient.provideRepository2()
         )
     ),
     navController: NavController,
-    navToDetail: (Long) -> Unit
+    navToDetail: (Long) -> Unit,
+    childId: String,
+    isStunting: Boolean
 ) {
     when (val uiState = viewModel.uiState.collectAsState(initial = UiState.Loading).value) {
         is UiState.Loading -> {
@@ -64,8 +70,8 @@ fun StuntingCheckResultScreen(
                     .padding(16.dp)
             ) {
                 StuntingCheckResultContent(
-                    onClickHome = { navController.popBackStack() },
-                    stunting = false/*TODO()*/,
+                    onClickHome = { navController.navigate("home/$childId") },
+                    stunting = isStunting ,
                     recipesRandom = uiState.data,
                     navToDetail = navToDetail
                 )
@@ -87,6 +93,7 @@ fun StuntingCheckResultContent(
         verticalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
     ) {
         Spacer(modifier = Modifier.height(4.dp))
         Column{
@@ -129,25 +136,31 @@ fun RecommendFoodAdditional(
     randomRecipe: List<Recipe>,
     navToDetail: (Long) -> Unit
 ) {
-    Text(text = "Rekomendasi Makanan",
-        fontWeight = FontWeight.Bold,
-        fontFamily = NunitoFontFamily,
-        fontSize = 16.sp,
-        color = md_theme_light_primary
-    )
-    Spacer(modifier = Modifier.height(16.dp))
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+    Column (
+        modifier = Modifier
+            .height(200.dp)
+
     ) {
-        items(randomRecipe) { recipe ->
-            FoodItem(
-                image = recipe.image,
-                titlefood = recipe.name,
-                tag = recipe.tag[0],
-                modifier = Modifier.clickable { navToDetail(recipe.id) }
-            )
+        Text(text = "Rekomendasi Makanan",
+            fontWeight = FontWeight.Bold,
+            fontFamily = NunitoFontFamily,
+            fontSize = 16.sp,
+            color = md_theme_light_primary
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+        ) {
+            items(randomRecipe) { recipe ->
+                FoodItem(
+                    image = recipe.image,
+                    titlefood = recipe.name,
+                    tag = recipe.tag[0],
+                    modifier = Modifier.clickable { navToDetail(recipe.id) }
+                )
+            }
         }
     }
 }
@@ -159,6 +172,8 @@ fun StuntingCheckResultScreenPreview() {
         navController = NavController(
             context = LocalContext.current
         ),
-        navToDetail = {}
+        navToDetail = {},
+        childId = "1",
+        isStunting = true
     )
 }

@@ -42,7 +42,7 @@ class GoogleAuthClient (
         return try {
             val user = auth.signInWithCredential(googleCredential).await().user!!
             SignInResult(
-                data = user?.run {
+                data = user.run {
                     UserData(
                         user.uid,
                         user.email,

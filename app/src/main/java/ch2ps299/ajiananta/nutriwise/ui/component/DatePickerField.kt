@@ -19,6 +19,7 @@ import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -29,15 +30,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ch2ps299.ajiananta.nutriwise.ui.theme.NunitoFontFamily
-import ch2ps299.ajiananta.nutriwise.ui.theme.md_theme_light_outlineVariant
 import ch2ps299.ajiananta.nutriwise.ui.theme.md_theme_light_primary
 import ch2ps299.ajiananta.nutriwise.ui.theme.md_theme_light_surfaceVariant
 import java.util.Calendar
 import java.util.Date
 
 @Composable
-fun DatePicker(labelText: String,
-               context: Context){
+fun DatePicker(
+    labelText: String,
+    context: Context,
+    selectedDate: MutableState<String> = remember  {mutableStateOf("") },
+) {
     val year: Int
     val month: Int
     val day: Int
@@ -47,9 +50,9 @@ fun DatePicker(labelText: String,
     day = calendar.get(Calendar.DAY_OF_MONTH)
     calendar.time = Date()
 
-    val date = remember { mutableStateOf("") }
-    val datePickerDialog = DatePickerDialog(context, { _: DatePicker, year: Int, month: Int, day: Int ->
-        date.value = "$day/$month/$year"
+    val datePickerDialog = DatePickerDialog(context, { _: DatePicker, years: Int, months: Int, days: Int ->
+        val correctedMonth = months + 1
+        selectedDate.value = "$days/$correctedMonth/$years"
     }, year, month, day)
 
     Column {
@@ -71,7 +74,7 @@ fun DatePicker(labelText: String,
             ) {
                 Icon(Icons.Default.DateRange, contentDescription = "Date Picker", tint = md_theme_light_surfaceVariant)
                 Spacer(modifier = Modifier.width(8.dp))
-                Text(text = date.value,  fontFamily = NunitoFontFamily, fontWeight = FontWeight.Bold, fontSize = 14.sp, color = md_theme_light_primary)
+                Text(text = selectedDate.value,  fontFamily = NunitoFontFamily, fontWeight = FontWeight.Bold, fontSize = 14.sp, color = md_theme_light_primary)
             }
         }
     }

@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import ch2ps299.ajiananta.nutriwise.di.DataInjection
+import ch2ps299.ajiananta.nutriwise.di.RetrofitClient
 import ch2ps299.ajiananta.nutriwise.model.Recipe
 import ch2ps299.ajiananta.nutriwise.ui.common.UiState
 import ch2ps299.ajiananta.nutriwise.ui.component.FilterChipComponent
@@ -39,7 +40,8 @@ import ch2ps299.ajiananta.nutriwise.ui.viewmodel.ViewModelFactory
 fun FoodRecipesScreen(
     viewModel: RecipesViewModel = viewModel(
         factory = ViewModelFactory(
-            DataInjection.provideRepository()
+            DataInjection.provideRepository(),
+            RetrofitClient.provideRepository2()
         )
     ),
     navToDetail: (Long) -> Unit
