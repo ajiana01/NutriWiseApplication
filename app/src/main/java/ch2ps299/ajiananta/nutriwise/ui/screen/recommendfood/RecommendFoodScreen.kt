@@ -16,10 +16,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -39,17 +42,19 @@ fun RecommendFoodScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(16.dp),
+        verticalArrangement = Arrangement.Center
     ){
-        RecommendFoodBanner(image = R.drawable.banner_recommend)
+        /*RecommendFoodBanner(image = R.drawable.banner_recommend)
         Spacer(modifier = Modifier.height(16.dp))
         NutritionChecker(
             checkNutrition = {
                 navController.navigate(route = "nutrition_result")
             }
         )
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(16.dp))*/
         //RecommendFoodAdditional()
+        UnderMaintenance()
     }
 }
 
@@ -95,6 +100,22 @@ fun RecommendFoodBanner(
                 maxLines = 2
             )
         }
+    }
+}
+
+@Composable
+fun UnderMaintenance() {
+    Column {
+        Image(painter = painterResource(id = R.drawable.software_engineer_cuate) ,contentDescription = "under maintenance")
+        Spacer(modifier = Modifier.height(32.dp))
+        Text(text = "Fitur ini sedang dalam pengembangan",
+            fontWeight = FontWeight.Bold,
+            fontFamily = NunitoFontFamily,
+            fontSize = 18.sp,
+            color = md_theme_light_primary,
+            style = TextStyle(textAlign = TextAlign.Center),
+            modifier = Modifier.fillMaxWidth()
+        )
     }
 }
 
